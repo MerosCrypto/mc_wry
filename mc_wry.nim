@@ -5,7 +5,7 @@ static:
   {.passL: "-lmc_wry".}
 
   #See https://github.com/MerosCrypto/mc_webview/commit/0554545321b66252ef1bc139f9a5f4794de11ae2 for why.
-  discard staticExec "cargo build --manifest-path=" & currentFolder & "Cargo.toml"
+  discard staticExec "cargo build --release --manifest-path=" & currentFolder & "Cargo.toml"
 
   when defined(linux):
     #Required so the string is considered static.
