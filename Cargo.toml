@@ -1,0 +1,14 @@
+[package]
+name = "mc_wry"
+version = "0.3.0"
+authors = ["Luke Parker <lukeparker5132@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "mc_wry"
+crate-type = ["staticlib"]
+
+[dependencies]
+libc = "0.2"
+serde_json = "1.0.64"
+wry = "0.9.2"
