@@ -26,13 +26,6 @@ pub struct Bundle {
 }
 
 #[repr(C)]
-pub struct BundleOuter {
-  // Depending on the C repr, valid may be able to moved to a simple is null check allowing collapsing this structure
-  valid: bool,
-  bundle: Box<Bundle>
-}
-
-#[repr(C)]
 pub struct RpcRequest {
   rpc_method: *const c_char,
   params: *const c_char
@@ -70,7 +63,7 @@ pub unsafe extern "C" fn new_webview(
   handler: extern "C" fn(
     request: RpcRequest
   ) -> *const c_char
-) -> BundleOuter {
+) -> *mut Bundle {
   match create_bundle(
     CStr::from_ptr(title).to_str().unwrap(),
     CStr::from_ptr(url).to_str().unwrap(),
@@ -96,18 +89,8 @@ pub unsafe extern "C" fn new_webview(
       )
     }
   ) {
-    Ok(bundle) => {
-      BundleOuter {
-        valid: true,
-        bundle: Box::new(bundle)
-      }
-    },
-    Err(_) => {
-      BundleOuter {
-        valid: false,
-        bundle: Box::<Bundle>::from_raw(ptr::null_mut())
-      }
-    }
+    Ok(bundle) => Box::into_raw(Box::new(bundle)),
+    Err(_) => ptr::null_mut()
   }
 }
 
@@ -126,9 +109,9 @@ fn run(
 
 #[no_mangle]
 pub unsafe extern "C" fn webview_run(
-  bundle: BundleOuter
+  bundle: *mut Bundle
 ) {
-  run(bundle.bundle.event_loop);
+  run(Box::from_raw(bundle).event_loop);
 }
 
 /*
@@ -145,7 +128,7 @@ fn terminate(
 
 #[no_mangle]
 pub unsafe extern "C" fn webview_terminate(
-  bundle: BundleOuter
+  bundle: *mut Bundle
 ) {
-  mem::drop(bundle.bundle);
+  mem::drop(Box::from_raw(bundle));
 }

@@ -21,8 +21,7 @@ static:
 {.push header: "mc_wry.h".}
 
 type
-  WebView* {.importc: "BundleOuter".} = object
-    valid*: bool
+  WebView* = pointer
 
   RpcRequest* {.importc: "RpcRequest".} = object
     rpc_method*: cstring
