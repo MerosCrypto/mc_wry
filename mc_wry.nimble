@@ -1,4 +1,4 @@
-version     = "0.3.3"
+version     = "0.3.4"
 author      = "kayabaNerve (Luke Parker)"
 description = "Heavily opinionated set of bindings for Wry."
 license     = "MIT"

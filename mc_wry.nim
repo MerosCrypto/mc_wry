@@ -13,7 +13,7 @@ static:
     {.passL: libs.}
     {.passL: "-lm".}
   elif defined(macosx):
-    {.passL: "-framework WebKit".}
+    {.passL: "-framework CoreFoundation -framework CoreGraphics -framework CoreVideo -framework ColorSync -framework AppKit -framework WebKit".}
 
   when not defined(Windows):
     {.passL: "-lpthread".}
